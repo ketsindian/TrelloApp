@@ -19,4 +19,6 @@ public interface IListService {
     public TList updateListByBoardIdListId(int boardId,TList list);
 
     public boolean listExistsByBoardIdListId(BoardListXref boardListXref);
+
+    public void checkBoardExists(int boardId);
 }

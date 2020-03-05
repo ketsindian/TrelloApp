@@ -34,6 +34,7 @@ public class ListService implements IListService{
 
     @Override
     public List<TList> getListByBoardId(int boardId) {
+        this.checkBoardExists(boardId);
         List<TList> list =listRepository.getListByBoardId(boardId);
         if(list.isEmpty())
             throw new ResourceNotFoundException("No List found with board : "+boardId);
@@ -42,6 +43,7 @@ public class ListService implements IListService{
 
     @Override
     public TList getListByBoardIdListId(BoardListXref boardListXref) {
+        this.checkBoardExists(boardListXref.getBoard_id());
         TList list=listRepository.getListByBoardIdListId(boardListXref.getBoard_id(),boardListXref.getList_id());
         if(list==null)
             throw new ResourceNotFoundException("List Not found by Board : "+boardListXref.getBoard_id()+" and list : "+boardListXref.getList_id());
@@ -51,8 +53,7 @@ public class ListService implements IListService{
     @Override
     @Transactional
     public TList addListByBoardId(int boardId,TList list) {
-        if(!boardService.boardExistsById(boardId))
-            throw new ResourceNotFoundException("board not found with id : " + boardId);
+        this.checkBoardExists(boardId);
         TList listAdded=listRepository.save(list);
         BoardListXref boardListXref=new BoardListXref();
         boardListXref.setList_id(listAdded.getList_id());
@@ -74,6 +75,7 @@ public class ListService implements IListService{
 
     @Override
     public TList updateListByBoardIdListId(int boardId,TList list) {
+        this.checkBoardExists(boardId);
         BoardListXref boardListXref=new BoardListXref();
         boardListXref.setBoard_id(boardId);
         boardListXref.setList_id(list.getList_id());
@@ -86,5 +88,11 @@ public class ListService implements IListService{
     public boolean listExistsByBoardIdListId(BoardListXref boardListXref) {
          Example<BoardListXref> example = Example.of(boardListXref, ExampleMatcher.matchingAll());;
          return boardListXrefRepository.exists(example);
+    }
+
+    @Override
+    public void checkBoardExists(int boardId){
+        if(!boardService.boardExistsById(boardId))
+            throw new ResourceNotFoundException("Board with id : "+boardId+" does not exist");
     }
 }
