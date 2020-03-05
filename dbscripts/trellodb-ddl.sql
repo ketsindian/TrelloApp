@@ -12,7 +12,6 @@ CREATE TABLE public.card_d (
 	CONSTRAINT card_d_un_1 UNIQUE (card_name)
 );
 
------------------------------------------------------
 -- Drop table
 
 -- DROP TABLE public.list_d;
@@ -20,11 +19,10 @@ CREATE TABLE public.card_d (
 CREATE TABLE public.list_d (
 	list_id int4 NOT NULL,
 	list_name varchar NOT NULL,
+	list_desc varchar NULL,
 	CONSTRAINT list_d_pk PRIMARY KEY (list_id),
-	CONSTRAINT list_d_un UNIQUE (list_name)
+	CONSTRAINT list_d_un UNIQUE (list_name, list_desc, list_id)
 );
-
------------------------------------------------------
 
 -- Drop table
 
@@ -45,8 +43,6 @@ CREATE INDEX user_d_email_id_idx ON public.user_d USING btree (email_id);
 CREATE INDEX user_d_first_name_idx ON public.user_d USING btree (first_name, last_name);
 CREATE INDEX user_d_last_name_idx ON public.user_d USING btree (last_name);
 
------------------------------------------------------
-
 -- Drop table
 
 -- DROP TABLE public.board_d;
@@ -60,8 +56,6 @@ CREATE TABLE public.board_d (
 	CONSTRAINT board_d_fk FOREIGN KEY (board_owner_id) REFERENCES user_d(user_id) ON UPDATE RESTRICT ON DELETE RESTRICT
 );
 
------------------------------------------------------
-
 -- Drop table
 
 -- DROP TABLE public.board_list_xref;
@@ -69,12 +63,11 @@ CREATE TABLE public.board_d (
 CREATE TABLE public.board_list_xref (
 	board_id int4 NOT NULL,
 	list_id int4 NOT NULL,
-	CONSTRAINT board_list_xref_un UNIQUE (board_id, list_id),
+	CONSTRAINT board_list_xref_pk_1 PRIMARY KEY (board_id, list_id),
+	CONSTRAINT board_list_xref_un UNIQUE (list_id),
 	CONSTRAINT board_list_xref_fk FOREIGN KEY (board_id) REFERENCES board_d(board_id) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT board_list_xref_fk_1 FOREIGN KEY (list_id) REFERENCES list_d(list_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
------------------------------------------------------
 
 -- Drop table
 
@@ -89,8 +82,6 @@ CREATE TABLE public.board_user_xref (
 	CONSTRAINT board_user_xref_fk_1 FOREIGN KEY (primary_user_id) REFERENCES user_d(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT board_user_xref_fk_2 FOREIGN KEY (secondary_user_id) REFERENCES user_d(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
------------------------------------------------------
 
 -- Drop table
 

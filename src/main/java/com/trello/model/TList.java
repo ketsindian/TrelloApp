@@ -19,4 +19,6 @@ public class TList {
     private int list_id;
 
     private String list_name;
+
+    private String list_desc;
 }
