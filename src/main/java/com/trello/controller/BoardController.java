@@ -1,6 +1,7 @@
 package com.trello.controller;
 
 import com.trello.model.Board;
+import com.trello.model.FullBoard;
 import com.trello.service.IBoardService;
 import com.trello.utils.TrelloDeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,10 @@ public class BoardController {
     public ResponseEntity deleteBoard(@Valid @PathVariable int boardId) {
         TrelloDeleteResponse trelloDeleteResponse = boardService.deleteBoardByID(boardId);
         return new ResponseEntity(trelloDeleteResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/getFullBoard/{boardId}")
+    public FullBoard getFullBoardById(@Valid @PathVariable int boardId){
+        return boardService.getFullBoardById(boardId);
     }
 }

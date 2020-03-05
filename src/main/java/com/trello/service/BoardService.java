@@ -1,6 +1,9 @@
 package com.trello.service;
 
 import com.trello.model.Board;
+import com.trello.model.FullBoard;
+import com.trello.model.FullList;
+import com.trello.model.TList;
 import com.trello.repository.BoardRepository;
 import com.trello.utils.ResourceNotFoundException;
 import com.trello.utils.TrelloDeleteResponse;
@@ -8,16 +11,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BoardService implements IBoardService {
 
     private final BoardRepository boardRepository;
+    private final IListService listService;
+    private final HelperService helperService;
+
 
     @Autowired
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(BoardRepository boardRepository, IListService listService, HelperService helperService) {
         this.boardRepository = boardRepository;
+        this.listService=listService;
+        this.helperService = helperService;
     }
 
     @Override
@@ -36,10 +46,8 @@ public class BoardService implements IBoardService {
 
     @Override
     public TrelloDeleteResponse deleteBoardByID(int boardId) {
-        if (this.boardExistsById(boardId))
-            boardRepository.deleteById(boardId);
-        else
-            throw new ResourceNotFoundException("board not found with id : " + boardId);
+        helperService.boardExistsById(boardId);
+        boardRepository.deleteById(boardId);
         TrelloDeleteResponse trelloDeleteResponse = new TrelloDeleteResponse();
         trelloDeleteResponse.setMessage("board deleted successfully with id : " + boardId);
         trelloDeleteResponse.setTimestamp(LocalDateTime.now());
@@ -48,14 +56,19 @@ public class BoardService implements IBoardService {
 
     @Override
     public Board updateBoardByID(Board board) {
-        if (this.boardExistsById(board.getBoard_id()))
-            return boardRepository.save(board);
-        else
-            throw new ResourceNotFoundException("board not found with id : " + board.getBoard_id());
+        helperService.boardExistsById(board.getBoard_id());
+        return boardRepository.save(board);
     }
 
     @Override
-    public boolean boardExistsById(int boardId) {
-        return boardRepository.existsById(boardId);
+    public FullBoard getFullBoardById(int boardId) {
+        FullBoard fullBoard=new FullBoard();
+        List<FullList> fullLists=new ArrayList<>();
+        for (TList list:listService.getListByBoardId(boardId)) {
+            fullLists.add(listService.getFullListByBoardId(boardId));
+        }
+        fullBoard.setBoardList(fullLists);
+        return fullBoard;
     }
+
 }

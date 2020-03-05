@@ -1,9 +1,8 @@
 package com.trello.service;
 
-import com.trello.model.BoardListXref;
 import com.trello.model.Card;
 import com.trello.model.ListCardXref;
-import com.trello.repository.BoardRepository;
+import com.trello.repository.BoardListXrefRepository;
 import com.trello.repository.CardRepository;
 import com.trello.repository.ListCardXrefRepository;
 import com.trello.utils.ResourceNotFoundException;
@@ -20,20 +19,20 @@ import java.util.List;
 @Service
 public class CardService implements  ICardService{
 
-    private final IListService listService;
     private final CardRepository cardRepository;
     private final ListCardXrefRepository listCardXrefRepository;
+    private final HelperService helperService;
 
     @Autowired
-    public CardService(CardRepository cardRepository,IListService listService, ListCardXrefRepository listCardXrefRepository) {
-        this.listService = listService;
+    public CardService(CardRepository cardRepository, ListCardXrefRepository listCardXrefRepository, HelperService helperService) {
         this.cardRepository=cardRepository;
         this.listCardXrefRepository=listCardXrefRepository;
+        this.helperService = helperService;
     }
 
     @Override
     public List<Card> getCardByListId(int boardId,int listId) {
-        this.checkBoardListExists(boardId,listId);
+        helperService.listExistsByBoardIdListId(boardId,listId);
         List<Card> cards=cardRepository.getCardByListId(listId);
         if(cards.isEmpty())
             throw new ResourceNotFoundException("No card found with list : "+listId);
@@ -42,7 +41,7 @@ public class CardService implements  ICardService{
 
     @Override
     public Card getCardByListIdCardId(int boardId,ListCardXref listCardXref) {
-        this.checkBoardListExists(boardId,listCardXref.getList_id());
+        helperService.listExistsByBoardIdListId(boardId,listCardXref.getList_id());
         Card card=cardRepository.getCardByListIdCardId(listCardXref.getList_id(),listCardXref.getCard_id());
         if(card==null)
             throw new ResourceNotFoundException("Card Not found by List : "+listCardXref.getList_id()+" and card : "+listCardXref.getCard_id());
@@ -52,7 +51,7 @@ public class CardService implements  ICardService{
     @Transactional
     @Override
     public Card addCardByListId(int boardId,int listId, Card card) {
-        this.checkBoardListExists(boardId,listId);
+        helperService.listExistsByBoardIdListId(boardId,listId);
         Card cardAdded=cardRepository.save(card);
         ListCardXref listCardXref=new ListCardXref();
         listCardXref.setCard_id(cardAdded.getCard_id());
@@ -63,8 +62,7 @@ public class CardService implements  ICardService{
 
     @Override
     public TrelloDeleteResponse deleteCardByListIdCardId(ListCardXref listCardXref) {
-        if(!this.listExistsByListIdCardId(listCardXref))
-            throw new ResourceNotFoundException("No card with id : "+listCardXref.getCard_id()+" found in list with id "+listCardXref.getList_id());
+        helperService.cardExistsByListIdCardId(listCardXref);
         cardRepository.deleteById(listCardXref.getCard_id());
         TrelloDeleteResponse deleteResponse=new TrelloDeleteResponse();
         deleteResponse.setTimestamp(LocalDateTime.now());
@@ -74,27 +72,13 @@ public class CardService implements  ICardService{
 
     @Override
     public Card updateCardByListIdCardId(int boardId,int listId, Card card) {
-        this.checkBoardListExists(boardId,listId);
+        helperService.listExistsByBoardIdListId(boardId,listId);
         ListCardXref listCardXref=new ListCardXref();
         listCardXref.setList_id(listId);
         listCardXref.setCard_id(card.getCard_id());
-        if(!this.listExistsByListIdCardId(listCardXref))
-            throw new ResourceNotFoundException("No card with id : "+listCardXref.getCard_id()+" found in list with id "+listCardXref.getList_id());
+        helperService.cardExistsByListIdCardId(listCardXref);
         return cardRepository.save(card);
     }
 
-    @Override
-    public boolean listExistsByListIdCardId(ListCardXref listCardXref) {
-        Example<ListCardXref> example = Example.of(listCardXref, ExampleMatcher.matchingAll());;
-        return listCardXrefRepository.exists(example);
-    }
 
-    private void checkBoardListExists(int boardId,int listId){
-        listService.checkBoardExists(boardId);
-        BoardListXref boardListXref=new BoardListXref();
-        boardListXref.setList_id(listId);
-        boardListXref.setBoard_id(boardId);
-        if(!listService.listExistsByBoardIdListId(boardListXref))
-            throw new ResourceNotFoundException("List with id :"+listId+"does not exist under Board with id : "+boardId);
-    }
 }

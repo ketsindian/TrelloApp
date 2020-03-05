@@ -1,6 +1,7 @@
 package com.trello.service;
 
 import com.trello.model.Board;
+import com.trello.model.FullBoard;
 import com.trello.utils.TrelloDeleteResponse;
 
 public interface IBoardService {
@@ -13,5 +14,6 @@ public interface IBoardService {
 
     public Board updateBoardByID(Board board);
 
-    public boolean boardExistsById(int boardId);
+    public FullBoard getFullBoardById(int boardId);
+
 }

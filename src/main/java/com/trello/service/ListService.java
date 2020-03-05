@@ -1,21 +1,17 @@
 package com.trello.service;
 
-import com.trello.model.Board;
-import com.trello.model.BoardListXref;
-import com.trello.model.TList;
+import com.trello.model.*;
 import com.trello.repository.BoardListXrefRepository;
 import com.trello.repository.BoardRepository;
 import com.trello.repository.ListRepository;
 import com.trello.utils.ResourceNotFoundException;
 import com.trello.utils.TrelloDeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.jpa.repository.query.Jpa21Utils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,18 +19,20 @@ public class ListService implements IListService{
 
     private final ListRepository listRepository;
     private final BoardListXrefRepository boardListXrefRepository;
-    private final IBoardService boardService;
+    private final ICardService cardService;
+    private final HelperService helperService;
 
     @Autowired
-    public ListService(ListRepository listRepository, BoardListXrefRepository boardListXrefRepository,IBoardService boardService) {
+    public ListService(ListRepository listRepository, BoardListXrefRepository boardListXrefRepository, ICardService cardService, HelperService helperService) {
         this.listRepository = listRepository;
         this.boardListXrefRepository=boardListXrefRepository;
-        this.boardService=boardService;
+        this.cardService=cardService;
+        this.helperService = helperService;
     }
 
     @Override
     public List<TList> getListByBoardId(int boardId) {
-        this.checkBoardExists(boardId);
+        helperService.boardExistsById(boardId);
         List<TList> list =listRepository.getListByBoardId(boardId);
         if(list.isEmpty())
             throw new ResourceNotFoundException("No List found with board : "+boardId);
@@ -43,7 +41,7 @@ public class ListService implements IListService{
 
     @Override
     public TList getListByBoardIdListId(BoardListXref boardListXref) {
-        this.checkBoardExists(boardListXref.getBoard_id());
+        helperService.boardExistsById(boardListXref.getBoard_id());
         TList list=listRepository.getListByBoardIdListId(boardListXref.getBoard_id(),boardListXref.getList_id());
         if(list==null)
             throw new ResourceNotFoundException("List Not found by Board : "+boardListXref.getBoard_id()+" and list : "+boardListXref.getList_id());
@@ -53,7 +51,7 @@ public class ListService implements IListService{
     @Override
     @Transactional
     public TList addListByBoardId(int boardId,TList list) {
-        this.checkBoardExists(boardId);
+        helperService.boardExistsById(boardId);
         TList listAdded=listRepository.save(list);
         BoardListXref boardListXref=new BoardListXref();
         boardListXref.setList_id(listAdded.getList_id());
@@ -64,8 +62,7 @@ public class ListService implements IListService{
 
     @Override
     public TrelloDeleteResponse deleteListByBoardIdListId(BoardListXref boardListXref) {
-        if(!this.listExistsByBoardIdListId(boardListXref))
-            throw new ResourceNotFoundException("No list with id : "+boardListXref.getList_id()+" found in board with id "+boardListXref.getBoard_id());
+        helperService.listExistsByBoardIdListId(boardListXref);
         listRepository.deleteById(boardListXref.getList_id());
         TrelloDeleteResponse deleteResponse=new TrelloDeleteResponse();
         deleteResponse.setTimestamp(LocalDateTime.now());
@@ -75,24 +72,25 @@ public class ListService implements IListService{
 
     @Override
     public TList updateListByBoardIdListId(int boardId,TList list) {
-        this.checkBoardExists(boardId);
         BoardListXref boardListXref=new BoardListXref();
         boardListXref.setBoard_id(boardId);
         boardListXref.setList_id(list.getList_id());
-        if(!this.listExistsByBoardIdListId(boardListXref))
-            throw new ResourceNotFoundException("No list with id : "+boardListXref.getList_id()+" found in board with id "+boardListXref.getBoard_id());
+        helperService.listExistsByBoardIdListId(boardListXref);
         return listRepository.save(list);
     }
 
-    @Override
-    public boolean listExistsByBoardIdListId(BoardListXref boardListXref) {
-         Example<BoardListXref> example = Example.of(boardListXref, ExampleMatcher.matchingAll());;
-         return boardListXrefRepository.exists(example);
-    }
 
     @Override
-    public void checkBoardExists(int boardId){
-        if(!boardService.boardExistsById(boardId))
-            throw new ResourceNotFoundException("Board with id : "+boardId+" does not exist");
+    public FullList getFullListByBoardId(int boardId) {
+        FullList fullList=new FullList();
+        List<FullCards> fullCardsList=new ArrayList<>();
+        for (TList list:this.getListByBoardId(boardId)) {
+            FullCards fullCards=new FullCards();
+            fullCards.setCards(cardService.getCardByListId(boardId,list.getList_id()));
+            fullCardsList.add(fullCards);
+        }
+        fullList.setListCards(fullCardsList);
+        return fullList;
     }
+
 }
