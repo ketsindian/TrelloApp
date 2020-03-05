@@ -12,4 +12,6 @@ public interface IBoardService {
     public TrelloDeleteResponse deleteBoardByID(int boardId);
 
     public Board updateBoardByID(Board board);
+
+    public boolean boardExistsById(int boardId);
 }

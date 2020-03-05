@@ -36,7 +36,7 @@ public class BoardService implements IBoardService {
 
     @Override
     public TrelloDeleteResponse deleteBoardByID(int boardId) {
-        if (boardRepository.existsById(boardId))
+        if (this.boardExistsById(boardId))
             boardRepository.deleteById(boardId);
         else
             throw new ResourceNotFoundException("board not found with id : " + boardId);
@@ -48,9 +48,14 @@ public class BoardService implements IBoardService {
 
     @Override
     public Board updateBoardByID(Board board) {
-        if (boardRepository.existsById(board.getBoard_id()))
+        if (this.boardExistsById(board.getBoard_id()))
             return boardRepository.save(board);
         else
             throw new ResourceNotFoundException("board not found with id : " + board.getBoard_id());
+    }
+
+    @Override
+    public boolean boardExistsById(int boardId) {
+        return boardRepository.existsById(boardId);
     }
 }
