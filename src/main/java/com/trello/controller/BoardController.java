@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 //@RequestMapping("/board")
 public class BoardController {
@@ -22,8 +24,13 @@ public class BoardController {
         this.boardService = boardService;
     }
 
+    @GetMapping("/board")
+    public List<Board> getAllBoards() {
+        return boardService.getAllBoards();
+    }
+
     @GetMapping("/board/{boardId}")
-    public Board getAllBoards(@Valid @PathVariable int boardId) {
+    public Board getBoardById(@Valid @PathVariable int boardId) {
         return boardService.getBoardByID(boardId);
     }
 

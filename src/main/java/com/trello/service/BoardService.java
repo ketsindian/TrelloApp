@@ -31,6 +31,14 @@ public class BoardService implements IBoardService {
     }
 
     @Override
+    public List<Board> getAllBoards() {
+        List<Board> listBoards=boardRepository.getAllBoardsByUserId(1);
+        if(listBoards.isEmpty())
+            throw new ResourceNotFoundException("no boards not found for this user ");
+        return listBoards;
+    }
+
+    @Override
     public Board getBoardByID(int boardId) {
         Optional<Board> board = boardRepository.findById(boardId);
         if (board.isPresent())
