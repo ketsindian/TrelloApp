@@ -58,4 +58,14 @@ public class TrelloExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
 
     }
+
+    @ExceptionHandler(TrelloAuthenticationException.class)
+    public final ResponseEntity<TrelloAuthenticationException> resourceNotFound(TrelloAuthenticationException e, WebRequest request) {
+        TrelloExceptionResponse errors = new TrelloExceptionResponse();
+        errors.setTimestamp(LocalDateTime.now());
+        errors.setMessage(e.getMessage());
+        errors.setErrorCode(HttpStatus.UNAUTHORIZED.value());
+        errors.setDetails(request.getDescription(false));
+        return new ResponseEntity(errors, HttpStatus.UNAUTHORIZED);
+    }
 }
