@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
 import static java.util.Collections.emptyList;
 
 
@@ -30,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (applicationUser == null) {
             throw new UsernameNotFoundException(mailId);
         }
-        Optional<UserSecurity> userSecurity= Optional.ofNullable(userSecurityRepository.getUserSecurityByUser_id(applicationUser.getUser_id()));
+        Optional<UserSecurity> userSecurity = Optional.ofNullable(userSecurityRepository.getUserSecurityByUser_id(applicationUser.getUser_id()));
         if (userSecurity.isEmpty()) {
             throw new UsernameNotFoundException(mailId);
         }

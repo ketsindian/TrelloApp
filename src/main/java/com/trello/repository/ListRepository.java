@@ -14,6 +14,6 @@ public interface ListRepository extends JpaRepository<TList, Integer> {
     public List<TList> getListByBoardId(int boardId);
 
     @Query("select ld from TList ld  inner join BoardListXref blx on blx.list_id =ld.list_id where blx.board_id = ?1 and ld.list_id= ?2")
-    public TList getListByBoardIdListId(int boardId,int listId);
+    public TList getListByBoardIdListId(int boardId, int listId);
 
 }

@@ -1,4 +1,5 @@
 package com.trello.model;
+
 import lombok.*;
 
 @Getter
@@ -8,5 +9,5 @@ import lombok.*;
 public class AppUserRequest extends AppUser {
 
     @NonNull
-     private String password;
+    private String password;
 }

@@ -26,14 +26,14 @@ public class BoardService implements IBoardService {
     @Autowired
     public BoardService(BoardRepository boardRepository, IListService listService, HelperService helperService) {
         this.boardRepository = boardRepository;
-        this.listService=listService;
+        this.listService = listService;
         this.helperService = helperService;
     }
 
     @Override
     public List<Board> getAllBoards() {
-        List<Board> listBoards=boardRepository.getAllBoardsByUserId(1);
-        if(listBoards.isEmpty())
+        List<Board> listBoards = boardRepository.getAllBoardsByUserId(1);
+        if (listBoards.isEmpty())
             throw new ResourceNotFoundException("no boards not found for this user ");
         return listBoards;
     }
@@ -70,9 +70,9 @@ public class BoardService implements IBoardService {
 
     @Override
     public FullBoard getFullBoardById(int boardId) {
-        FullBoard fullBoard=new FullBoard();
-        List<FullList> fullLists=new ArrayList<>();
-        for (TList list:listService.getListByBoardId(boardId)) {
+        FullBoard fullBoard = new FullBoard();
+        List<FullList> fullLists = new ArrayList<>();
+        for (TList list : listService.getListByBoardId(boardId)) {
             fullLists.add(listService.getFullListByBoardId(boardId));
         }
         fullBoard.setBoardList(fullLists);

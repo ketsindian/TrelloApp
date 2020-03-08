@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -29,7 +27,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(SecurityConstants.HEADER_STRING);
         String username = null;
         String jwtToken = null;
@@ -41,7 +39,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (IllegalArgumentException e) {
                 throw new TrelloAuthenticationException("JWT_TOKEN_NOT_FOUND");
             } catch (ExpiredJwtException e) {
-                throw new TrelloAuthenticationException("JWT_TOKEN_EXPIRED");            }
+                throw new TrelloAuthenticationException("JWT_TOKEN_EXPIRED");
+            }
         } else {
             logger.warn("JWT Token does not begin with Bearer String");
         }

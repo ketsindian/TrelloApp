@@ -36,34 +36,37 @@ public class HelperService {
 
     public void listExistsByBoardIdListId(BoardListXref boardListXref) {
         this.boardExistsById(boardListXref.getBoard_id());
-        Example<BoardListXref> example = Example.of(boardListXref, ExampleMatcher.matchingAll());;
-        if(!this.checkListExistsByBoardIdListId(boardListXref.getBoard_id(),boardListXref.getList_id()))
-            throw new ResourceNotFoundException("No list with id : "+boardListXref.getList_id()+" found in board with id "+boardListXref.getBoard_id());
+        Example<BoardListXref> example = Example.of(boardListXref, ExampleMatcher.matchingAll());
+        ;
+        if (!this.checkListExistsByBoardIdListId(boardListXref.getBoard_id(), boardListXref.getList_id()))
+            throw new ResourceNotFoundException("No list with id : " + boardListXref.getList_id() + " found in board with id " + boardListXref.getBoard_id());
     }
 
-    public boolean checkListExistsByBoardIdListId(int boardId,int listId){
-        BoardListXref boardListXref=new BoardListXref();
+    public boolean checkListExistsByBoardIdListId(int boardId, int listId) {
+        BoardListXref boardListXref = new BoardListXref();
         boardListXref.setList_id(listId);
         boardListXref.setBoard_id(boardId);
-        Example<BoardListXref> example = Example.of(boardListXref, ExampleMatcher.matchingAll());;
+        Example<BoardListXref> example = Example.of(boardListXref, ExampleMatcher.matchingAll());
+        ;
         return boardListXrefRepository.exists(example);
     }
 
 
-    public void listExistsByBoardIdListId(int boardId,int listId){
-        BoardListXref boardListXref=new BoardListXref();
+    public void listExistsByBoardIdListId(int boardId, int listId) {
+        BoardListXref boardListXref = new BoardListXref();
         boardListXref.setList_id(listId);
         boardListXref.setBoard_id(boardId);
         this.listExistsByBoardIdListId(boardListXref);
     }
 
     public void cardExistsByListIdCardId(ListCardXref listCardXref) {
-        if(!this.checkCardExistsByListIdCardId(listCardXref))
-            throw new ResourceNotFoundException("No card with id : "+listCardXref.getCard_id()+" found in list with id "+listCardXref.getList_id());
+        if (!this.checkCardExistsByListIdCardId(listCardXref))
+            throw new ResourceNotFoundException("No card with id : " + listCardXref.getCard_id() + " found in list with id " + listCardXref.getList_id());
     }
 
     public boolean checkCardExistsByListIdCardId(ListCardXref listCardXref) {
-        Example<ListCardXref> example = Example.of(listCardXref, ExampleMatcher.matchingAll());;
+        Example<ListCardXref> example = Example.of(listCardXref, ExampleMatcher.matchingAll());
+        ;
         return listCardXrefRepository.exists(example);
     }
 }

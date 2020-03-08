@@ -13,11 +13,11 @@ public interface IListService {
 
     public TList getListByBoardIdListId(BoardListXref boardListXref);
 
-    public TList addListByBoardId(int boardId,TList list);
+    public TList addListByBoardId(int boardId, TList list);
 
     public TrelloDeleteResponse deleteListByBoardIdListId(BoardListXref boardListXref);
 
-    public TList updateListByBoardIdListId(int boardId,TList list);
+    public TList updateListByBoardIdListId(int boardId, TList list);
 
     public FullList getFullListByBoardId(int boardId);
 

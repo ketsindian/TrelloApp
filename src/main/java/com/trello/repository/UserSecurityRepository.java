@@ -1,6 +1,5 @@
 package com.trello.repository;
 
-import com.trello.model.TList;
 import com.trello.model.UserSecurity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

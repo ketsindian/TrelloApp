@@ -52,7 +52,7 @@ public class BoardController {
     }
 
     @GetMapping("/getFullBoard/{boardId}")
-    public FullBoard getFullBoardById(@Valid @PathVariable int boardId){
+    public FullBoard getFullBoardById(@Valid @PathVariable int boardId) {
         return boardService.getFullBoardById(boardId);
     }
 }

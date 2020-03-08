@@ -29,8 +29,8 @@ public class UserSecurity implements Serializable {
     @Id
     private String password;
 
-    public void extractUserSecurityFormUserRequest( AppUserRequest userRequest){
-        this.user_id=userRequest.getUser_id();
-        this.password=userRequest.getPassword();
+    public void extractUserSecurityFormUserRequest(AppUserRequest userRequest) {
+        this.user_id = userRequest.getUser_id();
+        this.password = userRequest.getPassword();
     }
 }

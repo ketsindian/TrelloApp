@@ -1,11 +1,8 @@
 package com.trello.controller;
 
-import com.trello.model.BoardListXref;
-import com.trello.model.ListCardXref;
 import com.trello.model.Card;
-import com.trello.model.TList;
+import com.trello.model.ListCardXref;
 import com.trello.service.ICardService;
-import com.trello.service.IListService;
 import com.trello.utils.TrelloDeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,32 +24,32 @@ public class CardController {
     }
 
     @GetMapping("/card")
-    public List<Card> getCardByListId(@Valid @PathVariable int boardId,@Valid @PathVariable int listId) {
-        return cardService.getCardByListId(boardId,listId);
+    public List<Card> getCardByListId(@Valid @PathVariable int boardId, @Valid @PathVariable int listId) {
+        return cardService.getCardByListId(boardId, listId);
     }
 
     @GetMapping("/card/{cardId}")
-    public Card getCardByListIdCardId(@Valid @PathVariable int boardId ,@Valid @PathVariable int listId, @Valid @PathVariable int cardId) {
-        ListCardXref listCardXref=new ListCardXref();
+    public Card getCardByListIdCardId(@Valid @PathVariable int boardId, @Valid @PathVariable int listId, @Valid @PathVariable int cardId) {
+        ListCardXref listCardXref = new ListCardXref();
         listCardXref.setCard_id(cardId);
         listCardXref.setList_id(listId);
-        return cardService.getCardByListIdCardId(boardId,listCardXref);
+        return cardService.getCardByListIdCardId(boardId, listCardXref);
     }
 
     @PostMapping("/card")
-    public Card addCardToList(@Valid @PathVariable int boardId ,@Valid @PathVariable int listId, @Valid @RequestBody Card card) {
-        return cardService.addCardByListId(boardId,listId,card);
+    public Card addCardToList(@Valid @PathVariable int boardId, @Valid @PathVariable int listId, @Valid @RequestBody Card card) {
+        return cardService.addCardByListId(boardId, listId, card);
     }
 
     @PutMapping("/card/{cardId}")
-    public Card updateCardByListIdCardId(@Valid @PathVariable int boardId , @Valid @PathVariable int listId,@Valid @RequestBody Card card, @Valid @PathVariable int cardId) {
+    public Card updateCardByListIdCardId(@Valid @PathVariable int boardId, @Valid @PathVariable int listId, @Valid @RequestBody Card card, @Valid @PathVariable int cardId) {
         card.setCard_id(cardId);
-        return cardService.updateCardByListIdCardId(boardId,listId,card);
+        return cardService.updateCardByListIdCardId(boardId, listId, card);
     }
 
     @DeleteMapping("/card/{cardId}")
-    public ResponseEntity deleteCardByCardIdListId(@Valid @PathVariable int boardId , @Valid @PathVariable int listId,@Valid @PathVariable int cardId) {
-        ListCardXref listCardXref=new ListCardXref();
+    public ResponseEntity deleteCardByCardIdListId(@Valid @PathVariable int boardId, @Valid @PathVariable int listId, @Valid @PathVariable int cardId) {
+        ListCardXref listCardXref = new ListCardXref();
         listCardXref.setCard_id(cardId);
         listCardXref.setList_id(listId);
         TrelloDeleteResponse trelloDeleteResponse = cardService.deleteCardByListIdCardId(listCardXref);

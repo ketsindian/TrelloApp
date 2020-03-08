@@ -1,7 +1,5 @@
 package com.trello.repository;
 
-import com.trello.model.TList;
-import com.trello.model.Card;
 import com.trello.model.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,5 +13,5 @@ public interface CardRepository extends JpaRepository<Card, Integer> {
     public List<Card> getCardByListId(int listId);
 
     @Query("select cd from Card cd inner join ListCardXref lcx on lcx.card_id = cd.card_id where lcx.list_id = ?1 and lcx.card_id= ?2")
-    public Card getCardByListIdCardId(int listId,int cardId);
+    public Card getCardByListIdCardId(int listId, int cardId);
 }

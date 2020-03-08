@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final IUserService userService;
-    private final BCryptPasswordEncoder  bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public UserController(IUserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userService = userService;
@@ -21,7 +21,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public void signUp(@RequestBody AppUserRequest user) {
-        UserSecurity userSecurity=new UserSecurity();
+        UserSecurity userSecurity = new UserSecurity();
         userSecurity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userService.createUser(user);
     }

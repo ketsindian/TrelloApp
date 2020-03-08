@@ -29,27 +29,27 @@ public class ListController {
     }
 
     @GetMapping("/list/{listId}")
-    public TList getListByBoardIdListId(@Valid @PathVariable int boardId , @Valid @PathVariable int listId) {
-        BoardListXref boardListXref=new BoardListXref();
+    public TList getListByBoardIdListId(@Valid @PathVariable int boardId, @Valid @PathVariable int listId) {
+        BoardListXref boardListXref = new BoardListXref();
         boardListXref.setBoard_id(boardId);
         boardListXref.setList_id(listId);
         return listService.getListByBoardIdListId(boardListXref);
     }
 
     @PostMapping("/list")
-    public TList addListToBoard(@Valid @PathVariable int boardId , @Valid @RequestBody TList list) {
-        return listService.addListByBoardId(boardId,list);
+    public TList addListToBoard(@Valid @PathVariable int boardId, @Valid @RequestBody TList list) {
+        return listService.addListByBoardId(boardId, list);
     }
 
     @PutMapping("/list/{listId}")
-    public TList updateListByListIdBoardId(@Valid @PathVariable int boardId , @Valid @RequestBody TList list, @Valid @PathVariable int listId) {
+    public TList updateListByListIdBoardId(@Valid @PathVariable int boardId, @Valid @RequestBody TList list, @Valid @PathVariable int listId) {
         list.setList_id(listId);
-        return listService.updateListByBoardIdListId(boardId,list);
+        return listService.updateListByBoardIdListId(boardId, list);
     }
 
     @DeleteMapping("/list/{listId}")
-    public ResponseEntity deleteListByBoardIdListId(@Valid @PathVariable int boardId ,@Valid @PathVariable int listId) {
-        BoardListXref boardListXref=new BoardListXref();
+    public ResponseEntity deleteListByBoardIdListId(@Valid @PathVariable int boardId, @Valid @PathVariable int listId) {
+        BoardListXref boardListXref = new BoardListXref();
         boardListXref.setBoard_id(boardId);
         boardListXref.setList_id(listId);
         TrelloDeleteResponse trelloDeleteResponse = listService.deleteListByBoardIdListId(boardListXref);
