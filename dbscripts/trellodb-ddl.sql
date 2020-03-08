@@ -5,11 +5,10 @@
 
 CREATE TABLE public.card_d (
 	card_id int4 NOT NULL,
-	card_priority_id int4 NOT NULL,
 	card_name varchar NOT NULL,
+	card_desc varchar NULL,
 	CONSTRAINT card_d_pk PRIMARY KEY (card_id),
-	CONSTRAINT card_d_un UNIQUE (card_priority_id),
-	CONSTRAINT card_d_un_1 UNIQUE (card_name)
+	CONSTRAINT card_d_un_1 UNIQUE (card_id, card_name, card_desc)
 );
 
 -- Drop table
@@ -34,10 +33,8 @@ CREATE TABLE public.user_d (
 	last_name varchar NULL,
 	email_id varchar NOT NULL,
 	phone_number varchar NULL,
-	login_id varchar NULL,
 	CONSTRAINT user_d_pk PRIMARY KEY (user_id),
-	CONSTRAINT user_d_un UNIQUE (email_id),
-	CONSTRAINT user_d_un_1 UNIQUE (login_id)
+	CONSTRAINT user_d_un UNIQUE (email_id)
 );
 CREATE INDEX user_d_email_id_idx ON public.user_d USING btree (email_id);
 CREATE INDEX user_d_first_name_idx ON public.user_d USING btree (first_name, last_name);
@@ -91,7 +88,18 @@ CREATE TABLE public.list_card_xref (
 	list_id int4 NOT NULL,
 	card_id int4 NOT NULL,
 	card_priority_id int4 NOT NULL,
-	CONSTRAINT list_card_xref_un UNIQUE (list_id, card_id, card_priority_id),
+	CONSTRAINT list_card_xref_pk PRIMARY KEY (list_id, card_id, card_priority_id),
 	CONSTRAINT list_card_xref_fk FOREIGN KEY (list_id) REFERENCES list_d(list_id) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT list_card_xref_fk_1 FOREIGN KEY (card_id) REFERENCES card_d(card_id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+-- Drop table
+
+-- DROP TABLE public.user_security_d;
+
+CREATE TABLE public.user_security_d (
+	user_id int4 NOT NULL,
+	"password" varchar NOT NULL,
+	CONSTRAINT newtable_pk PRIMARY KEY (user_id, password),
+	CONSTRAINT user_security_d_fk FOREIGN KEY (user_id) REFERENCES user_d(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
