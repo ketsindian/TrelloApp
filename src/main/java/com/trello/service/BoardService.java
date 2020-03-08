@@ -49,6 +49,7 @@ public class BoardService implements IBoardService {
 
     @Override
     public Board addBoard(Board board) {
+        board.setBoard_owner_id(helperService.getUserFromContext().getUser_id());
         return boardRepository.save(board);
     }
 
