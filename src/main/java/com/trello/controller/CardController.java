@@ -3,7 +3,7 @@ package com.trello.controller;
 import com.trello.model.Card;
 import com.trello.model.ListCardXref;
 import com.trello.service.ICardService;
-import com.trello.utils.TrelloDeleteResponse;
+import com.trello.utils.TrelloFunctionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +52,7 @@ public class CardController {
         ListCardXref listCardXref = new ListCardXref();
         listCardXref.setCard_id(cardId);
         listCardXref.setList_id(listId);
-        TrelloDeleteResponse trelloDeleteResponse = cardService.deleteCardByListIdCardId(listCardXref);
-        return new ResponseEntity(trelloDeleteResponse, HttpStatus.OK);
+        TrelloFunctionResponse trelloFunctionResponse = cardService.deleteCardByListIdCardId(listCardXref);
+        return new ResponseEntity(trelloFunctionResponse, HttpStatus.OK);
     }
 }

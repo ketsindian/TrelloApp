@@ -6,7 +6,7 @@ import com.trello.model.FullList;
 import com.trello.model.TList;
 import com.trello.repository.BoardRepository;
 import com.trello.utils.ResourceNotFoundException;
-import com.trello.utils.TrelloDeleteResponse;
+import com.trello.utils.TrelloFunctionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class BoardService implements IBoardService {
 
     @Override
     public List<Board> getAllBoards() {
-        final int userId=helperService.getUserFromContext().getUser_id();
+        final int userId = helperService.getUserFromContext().getUser_id();
         List<Board> listBoards = boardRepository.getAllBoardsByUserId(userId);
         if (listBoards.isEmpty())
             throw new ResourceNotFoundException("no boards not found for this user ");
@@ -53,13 +53,13 @@ public class BoardService implements IBoardService {
     }
 
     @Override
-    public TrelloDeleteResponse deleteBoardByID(int boardId) {
+    public TrelloFunctionResponse deleteBoardByID(int boardId) {
         helperService.boardExistsById(boardId);
         boardRepository.deleteById(boardId);
-        TrelloDeleteResponse trelloDeleteResponse = new TrelloDeleteResponse();
-        trelloDeleteResponse.setMessage("board deleted successfully with id : " + boardId);
-        trelloDeleteResponse.setTimestamp(LocalDateTime.now());
-        return trelloDeleteResponse;
+        TrelloFunctionResponse trelloFunctionResponse = new TrelloFunctionResponse();
+        trelloFunctionResponse.setMessage("board deleted successfully with id : " + boardId);
+        trelloFunctionResponse.setTimestamp(LocalDateTime.now());
+        return trelloFunctionResponse;
     }
 
     @Override

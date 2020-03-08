@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class TrelloDeleteResponse {
+public class TrelloFunctionResponse {
 
     private String message;
 

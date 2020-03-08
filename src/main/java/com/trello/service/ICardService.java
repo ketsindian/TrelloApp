@@ -2,7 +2,7 @@ package com.trello.service;
 
 import com.trello.model.Card;
 import com.trello.model.ListCardXref;
-import com.trello.utils.TrelloDeleteResponse;
+import com.trello.utils.TrelloFunctionResponse;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface ICardService {
 
     public Card addCardByListId(int boardId, int listId, Card card);
 
-    public TrelloDeleteResponse deleteCardByListIdCardId(ListCardXref listCardXref);
+    public TrelloFunctionResponse deleteCardByListIdCardId(ListCardXref listCardXref);
 
     public Card updateCardByListIdCardId(int boardId, int listId, Card card);
 

@@ -5,7 +5,7 @@ import com.trello.model.ListCardXref;
 import com.trello.repository.CardRepository;
 import com.trello.repository.ListCardXrefRepository;
 import com.trello.utils.ResourceNotFoundException;
-import com.trello.utils.TrelloDeleteResponse;
+import com.trello.utils.TrelloFunctionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,10 +58,10 @@ public class CardService implements ICardService {
     }
 
     @Override
-    public TrelloDeleteResponse deleteCardByListIdCardId(ListCardXref listCardXref) {
+    public TrelloFunctionResponse deleteCardByListIdCardId(ListCardXref listCardXref) {
         helperService.cardExistsByListIdCardId(listCardXref);
         cardRepository.deleteById(listCardXref.getCard_id());
-        TrelloDeleteResponse deleteResponse = new TrelloDeleteResponse();
+        TrelloFunctionResponse deleteResponse = new TrelloFunctionResponse();
         deleteResponse.setTimestamp(LocalDateTime.now());
         deleteResponse.setMessage("card : " + listCardXref.getCard_id() + " removed successfully from list : " + listCardXref.getList_id());
         return deleteResponse;

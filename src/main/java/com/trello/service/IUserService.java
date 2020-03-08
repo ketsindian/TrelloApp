@@ -6,4 +6,6 @@ import com.trello.model.AppUserRequest;
 public interface IUserService {
 
     public AppUser createUser(AppUserRequest userRequest);
+
+    public boolean validateAppUser(AppUserRequest appUserRequest);
 }

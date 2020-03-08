@@ -3,7 +3,7 @@ package com.trello.service;
 import com.trello.model.BoardListXref;
 import com.trello.model.FullList;
 import com.trello.model.TList;
-import com.trello.utils.TrelloDeleteResponse;
+import com.trello.utils.TrelloFunctionResponse;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public interface IListService {
 
     public TList addListByBoardId(int boardId, TList list);
 
-    public TrelloDeleteResponse deleteListByBoardIdListId(BoardListXref boardListXref);
+    public TrelloFunctionResponse deleteListByBoardIdListId(BoardListXref boardListXref);
 
     public TList updateListByBoardIdListId(int boardId, TList list);
 

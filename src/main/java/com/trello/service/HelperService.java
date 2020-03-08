@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -77,16 +76,16 @@ public class HelperService {
         return listCardXrefRepository.exists(example);
     }
 
-    public AppUser getUserFromContext(){
+    public AppUser getUserFromContext() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final String mailId;
         if (principal instanceof UserDetails) {
-            mailId = ((UserDetails)principal).getUsername();
+            mailId = ((UserDetails) principal).getUsername();
         } else {
             mailId = principal.toString();
         }
-        AppUser user=userRepository.getAppUserByMailId(mailId);
-        if(user==null){
+        AppUser user = userRepository.getAppUserByMailId(mailId);
+        if (user == null) {
             throw new ResourceNotFoundException("User not found in context");
         }
         return user;

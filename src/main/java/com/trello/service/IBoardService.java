@@ -2,7 +2,7 @@ package com.trello.service;
 
 import com.trello.model.Board;
 import com.trello.model.FullBoard;
-import com.trello.utils.TrelloDeleteResponse;
+import com.trello.utils.TrelloFunctionResponse;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface IBoardService {
 
     public Board addBoard(Board board);
 
-    public TrelloDeleteResponse deleteBoardByID(int boardId);
+    public TrelloFunctionResponse deleteBoardByID(int boardId);
 
     public Board updateBoardByID(Board board);
 

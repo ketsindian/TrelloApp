@@ -7,7 +7,7 @@ import com.trello.model.TList;
 import com.trello.repository.BoardListXrefRepository;
 import com.trello.repository.ListRepository;
 import com.trello.utils.ResourceNotFoundException;
-import com.trello.utils.TrelloDeleteResponse;
+import com.trello.utils.TrelloFunctionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,10 +63,10 @@ public class ListService implements IListService {
     }
 
     @Override
-    public TrelloDeleteResponse deleteListByBoardIdListId(BoardListXref boardListXref) {
+    public TrelloFunctionResponse deleteListByBoardIdListId(BoardListXref boardListXref) {
         helperService.listExistsByBoardIdListId(boardListXref);
         listRepository.deleteById(boardListXref.getList_id());
-        TrelloDeleteResponse deleteResponse = new TrelloDeleteResponse();
+        TrelloFunctionResponse deleteResponse = new TrelloFunctionResponse();
         deleteResponse.setTimestamp(LocalDateTime.now());
         deleteResponse.setMessage("list : " + boardListXref.getList_id() + " removed successfully from board : " + boardListXref.getBoard_id());
         return deleteResponse;

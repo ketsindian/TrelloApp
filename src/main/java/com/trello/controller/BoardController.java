@@ -3,7 +3,7 @@ package com.trello.controller;
 import com.trello.model.Board;
 import com.trello.model.FullBoard;
 import com.trello.service.IBoardService;
-import com.trello.utils.TrelloDeleteResponse;
+import com.trello.utils.TrelloFunctionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,8 +47,8 @@ public class BoardController {
 
     @DeleteMapping("/board/{boardId}")
     public ResponseEntity deleteBoard(@Valid @PathVariable int boardId) {
-        TrelloDeleteResponse trelloDeleteResponse = boardService.deleteBoardByID(boardId);
-        return new ResponseEntity(trelloDeleteResponse, HttpStatus.OK);
+        TrelloFunctionResponse trelloFunctionResponse = boardService.deleteBoardByID(boardId);
+        return new ResponseEntity(trelloFunctionResponse, HttpStatus.OK);
     }
 
     @GetMapping("/getFullBoard/{boardId}")

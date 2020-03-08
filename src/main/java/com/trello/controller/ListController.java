@@ -3,7 +3,7 @@ package com.trello.controller;
 import com.trello.model.BoardListXref;
 import com.trello.model.TList;
 import com.trello.service.IListService;
-import com.trello.utils.TrelloDeleteResponse;
+import com.trello.utils.TrelloFunctionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +52,7 @@ public class ListController {
         BoardListXref boardListXref = new BoardListXref();
         boardListXref.setBoard_id(boardId);
         boardListXref.setList_id(listId);
-        TrelloDeleteResponse trelloDeleteResponse = listService.deleteListByBoardIdListId(boardListXref);
-        return new ResponseEntity(trelloDeleteResponse, HttpStatus.OK);
+        TrelloFunctionResponse trelloFunctionResponse = listService.deleteListByBoardIdListId(boardListXref);
+        return new ResponseEntity(trelloFunctionResponse, HttpStatus.OK);
     }
 }

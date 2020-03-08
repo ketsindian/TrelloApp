@@ -28,8 +28,6 @@ public class AppUser {
 
     private String phone_number;
 
-    @NonNull
-    private String login_id;
 
     public void extractFromUSerRequest(AppUserRequest userRequest) {
         this.user_id = userRequest.getUser_id();
@@ -37,7 +35,6 @@ public class AppUser {
         this.last_name = userRequest.getLast_name();
         this.email_id = userRequest.getEmail_id();
         this.phone_number = userRequest.getPhone_number();
-        this.login_id = userRequest.getLogin_id();
     }
 
 }

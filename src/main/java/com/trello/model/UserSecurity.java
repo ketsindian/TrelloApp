@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -31,6 +32,6 @@ public class UserSecurity implements Serializable {
 
     public void extractUserSecurityFormUserRequest(AppUserRequest userRequest) {
         this.user_id = userRequest.getUser_id();
-        this.password = userRequest.getPassword();
+        this.password = new BCryptPasswordEncoder().encode(userRequest.getPassword());
     }
 }
