@@ -22,7 +22,6 @@ public class BoardService implements IBoardService {
     private final IListService listService;
     private final HelperService helperService;
 
-
     @Autowired
     public BoardService(BoardRepository boardRepository, IListService listService, HelperService helperService) {
         this.boardRepository = boardRepository;
@@ -32,7 +31,8 @@ public class BoardService implements IBoardService {
 
     @Override
     public List<Board> getAllBoards() {
-        List<Board> listBoards = boardRepository.getAllBoardsByUserId(1);
+        final int userId=helperService.getUserFromContext().getUser_id();
+        List<Board> listBoards = boardRepository.getAllBoardsByUserId(userId);
         if (listBoards.isEmpty())
             throw new ResourceNotFoundException("no boards not found for this user ");
         return listBoards;
