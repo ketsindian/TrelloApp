@@ -6,26 +6,26 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
-import javax.validation.constraints.PositiveOrZero;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "board_d")
-public class Board {
+@Table(name = "board_user_xref")
+@IdClass(BoardUserXref.class)
+public class BoardUserXref  implements Serializable {
 
     @Id
-    @GeneratedValue
-    protected int board_id;
+    private int board_id;
 
-    protected String board_name;
+    @Id
+    private int primary_user_id;
 
-    @PositiveOrZero
-    protected int board_owner_id;
-
+    @Id
+    private int secondary_user_id;
 }

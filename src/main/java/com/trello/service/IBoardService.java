@@ -1,6 +1,7 @@
 package com.trello.service;
 
 import com.trello.model.Board;
+import com.trello.model.BoardUserResponse;
 import com.trello.model.FullBoard;
 import com.trello.utils.TrelloFunctionResponse;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface IBoardService {
 
-    public List<Board> getAllBoards();
+    public List<BoardUserResponse> getAllBoards();
 
     public Board getBoardByID(int boardId);
 

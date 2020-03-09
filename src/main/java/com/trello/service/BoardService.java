@@ -1,9 +1,6 @@
 package com.trello.service;
 
-import com.trello.model.Board;
-import com.trello.model.FullBoard;
-import com.trello.model.FullList;
-import com.trello.model.TList;
+import com.trello.model.*;
 import com.trello.repository.BoardRepository;
 import com.trello.utils.ResourceNotFoundException;
 import com.trello.utils.TrelloFunctionResponse;
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardService implements IBoardService {
@@ -30,11 +28,15 @@ public class BoardService implements IBoardService {
     }
 
     @Override
-    public List<Board> getAllBoards() {
+    public List<BoardUserResponse> getAllBoards() {
         final int userId = helperService.getUserFromContext().getUser_id();
-        List<Board> listBoards = boardRepository.getAllBoardsByUserId(userId);
+        List<BoardUserResponse> listBoards = boardRepository.getAllBoardsByOwnerId(userId).stream()
+                .map(x->new BoardUserResponse(x,USER_TYPE.OWNER)).collect(Collectors.toList());
         if (listBoards.isEmpty())
             throw new ResourceNotFoundException("no boards not found for this user ");
+        List<BoardUserResponse> listBoardsSecUsers = boardRepository.getBoardsBySecUserId(userId).stream().
+                map(x->new BoardUserResponse(x,USER_TYPE.SECONDARY_USER)).collect(Collectors.toList());
+        listBoards.addAll(listBoardsSecUsers);
         return listBoards;
     }
 

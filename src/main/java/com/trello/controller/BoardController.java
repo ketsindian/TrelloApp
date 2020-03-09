@@ -1,6 +1,7 @@
 package com.trello.controller;
 
 import com.trello.model.Board;
+import com.trello.model.BoardUserResponse;
 import com.trello.model.FullBoard;
 import com.trello.service.IBoardService;
 import com.trello.utils.TrelloFunctionResponse;
@@ -25,7 +26,7 @@ public class BoardController {
     }
 
     @GetMapping("/board")
-    public List<Board> getAllBoards() {
+    public List<BoardUserResponse> getAllBoards() {
         return boardService.getAllBoards();
     }
 
