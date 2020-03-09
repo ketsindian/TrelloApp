@@ -49,7 +49,7 @@ CREATE TABLE public.board_d (
 	board_name varchar NOT NULL,
 	board_owner_id int4 NOT NULL,
 	CONSTRAINT board_d_pk PRIMARY KEY (board_id),
-	CONSTRAINT board_d_un UNIQUE (board_name),
+	CONSTRAINT board_d_un UNIQUE (board_name, board_owner_id),
 	CONSTRAINT board_d_fk FOREIGN KEY (board_owner_id) REFERENCES user_d(user_id) ON UPDATE RESTRICT ON DELETE RESTRICT
 );
 
@@ -74,7 +74,7 @@ CREATE TABLE public.board_user_xref (
 	board_id int4 NOT NULL,
 	primary_user_id int4 NOT NULL,
 	secondary_user_id int4 NOT NULL,
-	CONSTRAINT board_user_xref_un UNIQUE (board_id, primary_user_id, secondary_user_id),
+	CONSTRAINT board_user_xref_pk PRIMARY KEY (board_id, primary_user_id, secondary_user_id),
 	CONSTRAINT board_user_xref_fk FOREIGN KEY (board_id) REFERENCES board_d(board_id) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT board_user_xref_fk_1 FOREIGN KEY (primary_user_id) REFERENCES user_d(user_id) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT board_user_xref_fk_2 FOREIGN KEY (secondary_user_id) REFERENCES user_d(user_id) ON UPDATE CASCADE ON DELETE CASCADE
