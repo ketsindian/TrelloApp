@@ -1,5 +1,6 @@
 package com.trello.repository;
 
+import com.trello.model.AppUser;
 import com.trello.model.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 
     @Query("select bd from Board bd inner join BoardUserXref bux on bd.board_id = bux.board_id  where bux.primary_user_id =?1")
     public List<Board> getBoardsByPriUserId(int user_id);
+
+    @Query("select ud from AppUser ud inner join BoardUserXref bux on bux.secondary_user_id = ud.user_id where bux.board_id = ?1")
+    public List<AppUser> getBoardSecondaryUsers(int boardId);
 }

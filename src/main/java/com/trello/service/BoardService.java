@@ -2,6 +2,8 @@ package com.trello.service;
 
 import com.trello.model.*;
 import com.trello.repository.BoardRepository;
+import com.trello.repository.BoardUserXrefRepository;
+import com.trello.repository.UserRepository;
 import com.trello.utils.ResourceNotFoundException;
 import com.trello.utils.TrelloFunctionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,16 @@ public class BoardService implements IBoardService {
     private final BoardRepository boardRepository;
     private final IListService listService;
     private final HelperService helperService;
+    private final UserRepository userRepository;
+    private final BoardUserXrefRepository boardUserXrefRepository;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository, IListService listService, HelperService helperService) {
+    public BoardService(BoardRepository boardRepository, IListService listService, HelperService helperService, UserRepository userRepository, BoardUserXrefRepository boardUserXrefRepository) {
         this.boardRepository = boardRepository;
         this.listService = listService;
         this.helperService = helperService;
+        this.userRepository = userRepository;
+        this.boardUserXrefRepository = boardUserXrefRepository;
     }
 
     @Override
@@ -50,9 +56,10 @@ public class BoardService implements IBoardService {
     }
 
     @Override
-    public Board addBoard(Board board) {
+    public BoardUserResponse addBoard(Board board) {
         board.setBoard_owner_id(helperService.getUserFromContext().getUser_id());
-        return boardRepository.save(board);
+        Board boardAdded= boardRepository.save(board);
+        return new BoardUserResponse(boardAdded,USER_TYPE.OWNER);
     }
 
     @Override
@@ -80,6 +87,39 @@ public class BoardService implements IBoardService {
         }
         fullBoard.setBoardList(fullLists);
         return fullBoard;
+    }
+
+    @Override
+    public List<AppUser> getSecUsersByBoardId(int boardId) {
+        helperService.boardExistsById(boardId);
+        final int currentUserId = helperService.getUserFromContext().getUser_id();
+        return boardRepository.getBoardSecondaryUsers(boardId).stream().filter(x->x.getUser_id()!=currentUserId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AppUser> getUnsharedUsersByBoardId(int boardId) {
+        final int currentUserId = helperService.getUserFromContext().getUser_id();
+        List<AppUser> allUsers=userRepository.findAll();
+        List<AppUser> sharedUsers=this.getSecUsersByBoardId(boardId);
+        return allUsers.stream().filter(x->!sharedUsers.contains(x)).filter(x->x.getUser_id()!=currentUserId).collect(Collectors.toList());
+    }
+
+    @Override
+    public BoardUserXref shareBoard(BoardUserXref boardUserXref) {
+        final int currentUserId = helperService.getUserFromContext().getUser_id();
+        boardUserXref.setPrimary_user_id(currentUserId);
+        return boardUserXrefRepository.save(boardUserXref);
+    }
+
+    @Override
+    public TrelloFunctionResponse unShareBoard(BoardUserXref boardUserXref) {
+        final int currentUserId = helperService.getUserFromContext().getUser_id();
+        boardUserXref.setPrimary_user_id(currentUserId);
+        boardUserXrefRepository.delete(boardUserXref);
+        TrelloFunctionResponse trelloFunctionResponse = new TrelloFunctionResponse();
+        trelloFunctionResponse.setMessage("board with id :"+ boardUserXref.getBoard_id()+"unshared with user : " + boardUserXref.getSecondary_user_id());
+        trelloFunctionResponse.setTimestamp(LocalDateTime.now());
+        return trelloFunctionResponse;
     }
 
 }

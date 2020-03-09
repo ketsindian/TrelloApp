@@ -1,8 +1,6 @@
 package com.trello.controller;
 
-import com.trello.model.Board;
-import com.trello.model.BoardUserResponse;
-import com.trello.model.FullBoard;
+import com.trello.model.*;
 import com.trello.service.IBoardService;
 import com.trello.utils.TrelloFunctionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +34,7 @@ public class BoardController {
     }
 
     @PostMapping("/board")
-    public Board addBoard(@Valid @RequestBody Board board) {
+    public BoardUserResponse addBoard(@Valid @RequestBody Board board) {
         return boardService.addBoard(board);
     }
 
@@ -56,4 +54,28 @@ public class BoardController {
     public FullBoard getFullBoardById(@Valid @PathVariable int boardId) {
         return boardService.getFullBoardById(boardId);
     }
+
+
+    @GetMapping("/board/{boardId}/sharedUsers")
+    public List<AppUser> getSharedUsersBoardById(@Valid @PathVariable int boardId) {
+        return boardService.getSecUsersByBoardId(boardId);
+    }
+
+    @GetMapping("/board/{boardId}/unsharedUsers")
+    public List<AppUser> getUnsharedUsersBoardById(@Valid @PathVariable int boardId) {
+        return boardService.getUnsharedUsersByBoardId(boardId);
+    }
+
+    @PostMapping("/board/{boardId}/shareBoard")
+    public BoardUserXref shareBoard(@Valid @PathVariable int boardId,@Valid @RequestBody BoardUserXref boardUserXref) {
+        boardUserXref.setBoard_id(boardId);
+        return boardService.shareBoard(boardUserXref);
+    }
+
+    @PostMapping("/board/{boardId}/unShareBoard")
+    public TrelloFunctionResponse unShareBoard(@Valid @PathVariable int boardId,@Valid @RequestBody BoardUserXref boardUserXref) {
+        boardUserXref.setBoard_id(boardId);
+        return boardService.unShareBoard(boardUserXref);
+    }
+
 }
