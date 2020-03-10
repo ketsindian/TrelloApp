@@ -86,11 +86,11 @@ public class ListService implements IListService {
     public FullList getFullListByBoardId(int boardId) {
         FullList fullList = new FullList();
         List<FullCards> fullCardsList = new ArrayList<>();
-        for (TList list : this.getListByBoardId(boardId)) {
-            FullCards fullCards = new FullCards();
-            fullCards.setCards(cardService.getCardByListId(boardId, list.getList_id()));
-            fullCardsList.add(fullCards);
-        }
+//        for (TList list : this.getListByBoardId(boardId)) {
+//            FullCards fullCards = new FullCards();
+//            fullCards.setCards(cardService.getCardByListId(boardId, list.getList_id()));
+//            fullCardsList.add(fullCards);
+//        }
         fullList.setListCards(fullCardsList);
         return fullList;
     }

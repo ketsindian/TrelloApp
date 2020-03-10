@@ -19,8 +19,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Entity
 @Table(name = "list_card_xref")
-@IdClass(ListCardXref.class)
-public class ListCardXref implements Serializable {
+@IdClass(ListCardXrefCompositeKey.class)
+public class ListCardXref {
 
     @Id
     @PositiveOrZero
@@ -30,7 +30,5 @@ public class ListCardXref implements Serializable {
     @PositiveOrZero
     private int card_id;
 
-    @Id
-    @PositiveOrZero
     private int card_priority_id;
 }

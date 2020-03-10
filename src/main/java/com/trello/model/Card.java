@@ -20,9 +20,9 @@ public class Card {
 
     @Id
     @GeneratedValue
-    private int card_id;
+    protected int card_id;
 
-    private String card_name;
+    protected String card_name;
 
-    private String card_desc;
+    protected String card_desc;
 }

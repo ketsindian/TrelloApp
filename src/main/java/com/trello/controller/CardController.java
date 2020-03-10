@@ -1,6 +1,7 @@
 package com.trello.controller;
 
 import com.trello.model.Card;
+import com.trello.model.CardResponse;
 import com.trello.model.ListCardXref;
 import com.trello.service.ICardService;
 import com.trello.utils.TrelloFunctionResponse;
@@ -24,7 +25,7 @@ public class CardController {
     }
 
     @GetMapping("/card")
-    public List<Card> getCardByListId(@Valid @PathVariable int boardId, @Valid @PathVariable int listId) {
+    public List<CardResponse> getCardByListId(@Valid @PathVariable int boardId, @Valid @PathVariable int listId) {
         return cardService.getCardByListId(boardId, listId);
     }
 
@@ -37,7 +38,7 @@ public class CardController {
     }
 
     @PostMapping("/card")
-    public Card addCardToList(@Valid @PathVariable int boardId, @Valid @PathVariable int listId, @Valid @RequestBody Card card) {
+    public CardResponse addCardToList(@Valid @PathVariable int boardId, @Valid @PathVariable int listId, @Valid @RequestBody Card card) {
         return cardService.addCardByListId(boardId, listId, card);
     }
 

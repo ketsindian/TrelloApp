@@ -71,8 +71,7 @@ public class HelperService {
     }
 
     public boolean checkCardExistsByListIdCardId(ListCardXref listCardXref) {
-        Example<ListCardXref> example = Example.of(listCardXref, ExampleMatcher.matchingAll());
-        ;
+        Example<ListCardXref> example = Example.of(listCardXref, ExampleMatcher.matchingAny());
         return listCardXrefRepository.exists(example);
     }
 
