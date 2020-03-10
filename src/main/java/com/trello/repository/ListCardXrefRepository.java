@@ -16,6 +16,12 @@ public interface ListCardXrefRepository extends JpaRepository<ListCardXref, Inte
     @Query("select lcx from ListCardXref lcx where lcx.list_id=?1 and lcx.card_priority_id>?2")
     public List<ListCardXref> getListCardWithLowerPriority(int listId,int priority);
 
+    @Query("select lcx from ListCardXref lcx where lcx.list_id=?1 and lcx.card_priority_id>?2")
+    public List<ListCardXref> getListCardWithHigherPriority(int listId,int priority);
+
+    @Query("select lcx from ListCardXref lcx where lcx.list_id=?1 and lcx.card_priority_id<?2 and lcx.card_priority_id>?3")
+    public List<ListCardXref> getListCardWithPriorityBound(int listId,int priority_upper_bound,int priority_lower_bound);
+
     @Query("select lcx from ListCardXref lcx where lcx.list_id=?1 and lcx.card_id=?2")
     public ListCardXref getByListCardId(int listId,int cardId);
 

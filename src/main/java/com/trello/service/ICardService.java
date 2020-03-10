@@ -19,4 +19,6 @@ public interface ICardService {
 
     public Card updateCardByListIdCardId(int boardId, int listId, Card card);
 
+    public TrelloFunctionResponse movePriorityWithinList(ListCardXref listCardXref,int newPriority);
+
 }

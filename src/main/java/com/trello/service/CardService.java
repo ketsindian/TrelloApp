@@ -109,4 +109,25 @@ public class CardService implements ICardService {
             throw new ResourceNotFoundException("No card with id : " + listCardXref.getCard_id() + " found in list with id " + listCardXref.getList_id());
         return listCardXrefFound;
     }
+
+    public TrelloFunctionResponse movePriorityWithinList(ListCardXref listCardXref,int newPriority){
+        int prevPriority=listCardXref.getCard_priority_id();
+        TrelloFunctionResponse trelloFunctionResponse=new TrelloFunctionResponse();
+        trelloFunctionResponse.setTimestamp(LocalDateTime.now());
+        if(prevPriority==newPriority){
+            trelloFunctionResponse.setMessage("no change in priority :"+listCardXref.getCard_id());
+        }
+        if(prevPriority>newPriority){
+            List<ListCardXref> listToUpdate=listCardXrefRepository.getListCardWithPriorityBound(listCardXref.getList_id(),newPriority,prevPriority+1);
+            listToUpdate.forEach(x-> x.setCard_priority_id(x.getCard_priority_id()+1));
+            listCardXrefRepository.saveAll(listToUpdate);
+            trelloFunctionResponse.setMessage("card priority upgraded :"+listCardXref.getCard_id());
+        }else if(prevPriority<newPriority){
+            List<ListCardXref> listToUpdate=listCardXrefRepository.getListCardWithPriorityBound(listCardXref.getList_id(),prevPriority+1,newPriority);
+            listToUpdate.forEach(x-> x.setCard_priority_id(x.getCard_priority_id()-1));
+            listCardXrefRepository.saveAll(listToUpdate);
+            trelloFunctionResponse.setMessage("card priority downgraded :"+listCardXref.getCard_id());
+        }
+        return trelloFunctionResponse;
+    }
 }

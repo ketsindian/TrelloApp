@@ -2,6 +2,7 @@ package com.trello.controller;
 
 import com.trello.model.Card;
 import com.trello.model.CardResponse;
+import com.trello.model.ListCardChange;
 import com.trello.model.ListCardXref;
 import com.trello.service.ICardService;
 import com.trello.utils.TrelloFunctionResponse;
@@ -56,4 +57,13 @@ public class CardController {
         TrelloFunctionResponse trelloFunctionResponse = cardService.deleteCardByListIdCardId(listCardXref);
         return new ResponseEntity(trelloFunctionResponse, HttpStatus.OK);
     }
+
+    @PostMapping("/card/{cardId}")
+    public TrelloFunctionResponse changeListCard(@Valid @PathVariable int boardId, @Valid @PathVariable int listId, @Valid @PathVariable int cardId, @RequestBody ListCardChange listCardChange){
+        ListCardXref listCardXref = new ListCardXref();
+        listCardXref.setList_id(listId);
+        listCardXref.setCard_id(cardId);
+        return cardService.movePriorityWithinList(listCardXref,listCardChange.getChangeCardPriorityId());
+    }
+
 }
