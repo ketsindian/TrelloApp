@@ -88,7 +88,8 @@ CREATE TABLE public.list_card_xref (
 	list_id int4 NOT NULL,
 	card_id int4 NOT NULL,
 	card_priority_id int4 NOT NULL,
-	CONSTRAINT list_card_xref_pk PRIMARY KEY (list_id, card_id, card_priority_id),
+	CONSTRAINT list_card_xref_pk PRIMARY KEY (list_id, card_id),
+	CONSTRAINT list_card_xref_un UNIQUE (card_id),
 	CONSTRAINT list_card_xref_fk FOREIGN KEY (list_id) REFERENCES list_d(list_id) ON UPDATE CASCADE ON DELETE CASCADE,
 	CONSTRAINT list_card_xref_fk_1 FOREIGN KEY (card_id) REFERENCES card_d(card_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
