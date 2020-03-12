@@ -1,5 +1,6 @@
 package com.trello.controller;
 
+import com.trello.integration.TrelloApiIntegrationService;
 import com.trello.model.*;
 import com.trello.service.IBoardService;
 import com.trello.utils.TrelloFunctionResponse;
@@ -17,15 +18,22 @@ import java.util.List;
 public class BoardController {
 
     private final IBoardService boardService;
+    private final TrelloApiIntegrationService trelloApiIntegrationService;
 
     @Autowired
-    public BoardController(IBoardService boardService) {
+    public BoardController(IBoardService boardService, TrelloApiIntegrationService trelloApiIntegrationService) {
         this.boardService = boardService;
+        this.trelloApiIntegrationService = trelloApiIntegrationService;
     }
 
     @GetMapping("/board")
     public List<BoardUserResponse> getAllBoards() {
         return boardService.getAllBoards();
+    }
+
+    @GetMapping("/fetchboard/{boardId}")
+    public Board SyncBoardFromTrello(@Valid @PathVariable String boardId) {
+        return trelloApiIntegrationService.syncFromTrello(boardId);
     }
 
     @GetMapping("/board/{boardId}")
